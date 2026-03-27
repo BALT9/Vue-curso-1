@@ -8,8 +8,33 @@ const producto = ref({});
 console.log(JSON.stringify(producto.value, null, 2));
 
 function crearProducto() {
-  productos.value.push(producto.value);
+  const posicion = productos.value.findIndex(
+    (item) => item.id === producto.value.id
+  );
+
+  if (posicion > -1) {
+    productos.value[posicion] = producto.value;
+  } else {
+    productos.value.push(producto.value);
+  }
+
+  // limpia el formulario
+  producto.value = {};
+
+  // alert(posicion)
+
   console.log(JSON.stringify(productos.value, null, 2));
+}
+
+function funEditarProducto(prod) {
+  let mi_prod = { ...prod };
+  producto.value = mi_prod;
+}
+
+function funEliminarProducto(pos){
+  if(confirm("Esta seguro de eliminar este producto")){
+    productos.value.splice(pos, 1);
+  }
 }
 
 // Iniciliza al recargar la pag (como useEffect de react)
@@ -52,7 +77,7 @@ onMounted(() => {
         <p class="text-gray-500 mt-1">Administra tus productos fácilmente</p>
       </div>
 
-      <span>{{ producto }}</span>
+      <pre>{{ JSON.stringify(producto, null, 2) }}</pre>
 
       <!-- FORM CARD -->
       <div
@@ -60,7 +85,7 @@ onMounted(() => {
       >
         <h2 class="text-lg font-semibold text-gray-700 mb-4">Crear Producto</h2>
 
-        <form class="grid grid-cols-1 md:grid-cols-2 gap-4"> 
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             placeholder="ID"
             class="p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-400 outline-none transition"
@@ -89,7 +114,6 @@ onMounted(() => {
             <button
               class="bg-gradient-to-r from-blue-500 to-blue-600 hover:scale-105 transition transform text-white px-6 py-2 rounded-xl shadow-md"
               type="button"
-
               @click="crearProducto"
             >
               Crear
@@ -118,6 +142,7 @@ onMounted(() => {
         <table class="w-full text-sm text-gray-700">
           <thead class="bg-gray-100 text-xs uppercase text-gray-500">
             <tr>
+              <th class="px-6 py-3">POS</th>
               <th class="px-6 py-3">ID</th>
               <th class="px-6 py-3">Producto</th>
               <th class="px-6 py-3">Precio</th>
@@ -128,10 +153,11 @@ onMounted(() => {
 
           <tbody>
             <tr
-              v-for="prod in productos"
+              v-for="(prod, pos) in productos"
               :key="prod.id"
               class="border-t hover:bg-gray-50 transition"
             >
+              <td class="px-6 py-4 font-medium"> {{ pos }} </td>
               <td class="px-6 py-4 font-medium">{{ prod.id }}</td>
 
               <td class="px-6 py-4 font-semibold text-gray-800">
@@ -151,12 +177,14 @@ onMounted(() => {
 
               <td class="px-6 py-4 text-center space-x-2">
                 <button
+                  @click="funEditarProducto(prod)"
                   class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-lg text-xs shadow"
                 >
                   Editar
                 </button>
 
                 <button
+                  @click="funEliminarProducto(pos)"
                   class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-xs shadow"
                 >
                   Eliminar
