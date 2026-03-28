@@ -1,3 +1,3 @@
 <template>
-    <h1>Inicio</h1>
+    <h1>Pagina Inicio lorem</h1>
 </template>
