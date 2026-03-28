@@ -16,11 +16,10 @@ import Inicio from "./views/Inicio.vue";
   <!-- <Blog /> -->
   <!-- <h1>Principal</h1> -->
 
-  <nav>
+  <nav class="bg-blue-500 h-20 flex items-center justify-evenly text-white text-lg">
     <RouterLink to="/">Inicio</RouterLink>
     <RouterLink to="/blog">Blog</RouterLink>
     <RouterLink to="/productos">Productos</RouterLink>
-    
   </nav>
 
   <RouterView />
